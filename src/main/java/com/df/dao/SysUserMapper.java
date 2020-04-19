@@ -1,8 +1,10 @@
 package com.df.dao;
 
+import com.df.dto.QueryDto;
 import com.df.pojo.SysUser;
 import com.df.pojo.SysUserExample;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -30,4 +32,10 @@ public interface SysUserMapper {
     int updateByPrimaryKeySelective(SysUser record);
 
     int updateByPrimaryKey(SysUser record);
+
+    List<SysUser> findByPage(QueryDto queryDto);
+
+    List<Map<String,Object>> exportUser();
+
+    SysUser findUserByUsername(String username);
 }

@@ -17,16 +17,17 @@
 
     <div v-show="showList">
         <div id="toolbar">
-            <button v-if="hasPermission('sys:menu:save')"  class="btn btn-success " type="button" @click="add">
+            <button class="btn btn-success " type="button" @click="add">
                 <i class="fa fa-plus"></i>&nbsp;&nbsp;<span class="bold">新增</span>
             </button>
-            <button v-if="hasPermission('sys:menu:update')" class="btn btn-success " type="button" @click="update">
+            <button class="btn btn-success " type="button" @click="update">
                 <i class="fa fa-pencil-square-o"></i>&nbsp;&nbsp;<span class="bold">修改</span>
             </button>
-            <button v-if="hasPermission('sys:menu:delete')" class="btn btn-danger " type="button" @click="del">
+            <button  class="btn btn-danger " type="button" @click="del">
                 <i class="fa fa-remove"></i>&nbsp;&nbsp;<span class="bold">删除</span>
             </button>
         </div>
+
 
         <table id="table"></table>
     </div>

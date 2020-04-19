@@ -255,4 +255,30 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
+
+  <!--分页查询用户数据-->
+  <select id="findByPage" resultMap="BaseResultMap" parameterType="com.df.dto.QueryDto">
+    select <include refid="Base_Column_List"></include>
+    from sys_user
+    <where>
+      <if test="search != null and search !=''">
+        and username like concat('%','#{search}','%')
+      </if>
+    </where>
+    <if test="sort != null and sort != ''">
+      order by ${sort} ${order}
+    </if>
+  </select>
+
+  <!--查询用户表信息-->
+  <select id="exportUser" resultType="java.util.Map">
+    select user_id as userId,username,email,mobile,create_time as createTime from sys_user
+  </select>
+
+  <!--根据用户名查询用户信息-->
+  <select id="findUserByUsername" parameterType="String" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include>
+    from sys_user
+    where username = #{username }
+  </select>
 </mapper>

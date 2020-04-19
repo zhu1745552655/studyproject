@@ -290,5 +290,45 @@
       from sys_menu
       where type != 2
   </select>
+    
+    <!--根据用户id查找菜单权限-->
+    <select id="findPermsByUserId" parameterType="Long" resultType="String">
+        select DISTINCT m.perms from sys_menu m
+        INNER JOIN sys_role_menu srm
+        on m.menu_id = srm.menu_id
+        INNER JOIN sys_user_role sur
+        on srm.role_id = sur.role_id
+        INNER JOIN sys_user su
+        on sur.user_id = su.user_id
+        where su.user_id = #{userId}
+    </select>
+
+    <!--查询一级目录-->
+    <select id="findDirMenuByUserId" parameterType="Long" resultType="java.util.Map">
+        select DISTINCT
+        sm.menu_id menuId,sm.parent_id parentId, sm.name name, sm.type type,sm.icon icon
+        from sys_menu sm
+        INNER JOIN sys_role_menu srm
+        on sm.menu_id=srm.menu_id
+        INNER JOIN sys_user_role sur
+        on sur.role_id=srm.role_id
+        where type=0 and sur.user_id=#{userId}
+    </select>
+
+    <!--查询一级目录对应的菜单-->
+    <select id="findMenuNotButtonByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+        select DISTINCT
+        sm.menu_id menuId,sm.parent_id parentId,sm.name name,sm.type type,sm.icon icon,sm.url url
+        from sys_menu sm
+        INNER JOIN sys_role_menu srm
+        on sm.menu_id=srm.menu_id
+        INNER JOIN sys_user_role sur
+        on srm.role_id=sur.role_id
+        INNER JOIN sys_user su
+        on sur.user_id=su.user_id
+        where type=1
+        and sm.parent_id=#{parentId}
+        and su.user_id=#{userId}
+    </select>
 
 </mapper>

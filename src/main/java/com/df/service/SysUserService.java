@@ -1,6 +1,9 @@
 package com.df.service;
 
+import com.df.dto.DataGridResult;
+import com.df.dto.QueryDto;
 import com.df.pojo.SysUser;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.List;
 
@@ -11,5 +14,11 @@ import java.util.List;
 public interface SysUserService {
 
     List<SysUser> findAll();
+
+    DataGridResult findUserByPage(QueryDto queryDto);
+
+    Workbook exportUser();
+
+    SysUser findUserByUsername(String username);
 
 }

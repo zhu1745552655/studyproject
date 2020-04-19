@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * @description: 查找菜单实现
@@ -129,5 +129,48 @@ public class MenuServiceImpl implements MenuService {
     public R updateMenu(SysMenu sysMenu) {
         int i = sysMenuMapper.updateByPrimaryKeySelective(sysMenu);
         return i > 0 ? R.ok() : R.error("修改失败！");
+    }
+
+    /**
+     * 根据用户id查找权限
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<String> findPermsByUserId(Long userId) {
+        List<String> permsByUserId = sysMenuMapper.findPermsByUserId(userId);
+        Set<String> set = new HashSet<>();
+        for (String s : permsByUserId) {
+            if (s != null && !s.equals("")) {
+                String[] split = s.split(",");
+                for (String s1 : split) {
+                    set.add(s1);
+                }
+            }
+        }
+        List<String> perms = new ArrayList<>();
+        perms.addAll(set);
+        return perms;
+    }
+
+    /**
+     * 根据用户id查找菜单
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public R findUserMenu(Long userId) {
+        //查询用户的一级目录
+        List<Map<String, Object>> dirMenuByUserId = sysMenuMapper.findDirMenuByUserId(userId);
+        //查询目录对应的子菜单
+        for (Map<String, Object> map : dirMenuByUserId) {
+            Long menuId = Long.parseLong(map.get("menuId") + "");
+            List<Map<String, Object>> subList = sysMenuMapper.findMenuNotButtonByUserId(userId, menuId);
+            map.put("list", subList);
+        }
+        List<String> permsByUserId = sysMenuMapper.findPermsByUserId(userId);
+        return R.ok().put("menuList", dirMenuByUserId).put("permissions", permsByUserId);
     }
 }

@@ -5,6 +5,7 @@ import com.df.dto.QueryDto;
 import com.df.pojo.SysMenu;
 import com.df.service.MenuService;
 import com.df.utils.R;
+import com.df.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -97,5 +98,18 @@ public class MenuController {
     public R updateMenu(@RequestBody SysMenu sysMenu) {
         return menuService.updateMenu(sysMenu);
     }
+
+
+    /**
+     * 获取用户动态菜单
+     * @return
+     */
+    @RequestMapping("/sys/menu/user")
+    @ResponseBody
+    public R userMenu(){
+        long userId = ShiroUtils.getUserId();
+        return menuService.findUserMenu(userId);
+    }
+
 
 }
